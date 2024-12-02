@@ -1,0 +1,34 @@
+[
+    {
+      "transactionId": "txn_001",
+      "productId": "prod_004",
+      "quantity": 5,
+      "transactionType": "sale",
+      "date": "2024-01-04T13:00:00Z",
+      "remarks": "Sold to customer John Doe"
+    },
+    {
+      "transactionId": "txn_002",
+      "productId": "prod_005",
+      "quantity": 10,
+      "transactionType": "sale",
+      "date": "2024-01-05T14:00:00Z",
+      "remarks": "Sold to customer Jane Smith"
+    },
+    {
+      "transactionId": "txn_003",
+      "productId": "prod_006",
+      "quantity": 2,
+      "transactionType": "return",
+      "date": "2024-01-06T15:00:00Z",
+      "remarks": "Returned by customer for replacement"
+    },
+    {
+      "transactionId": "txn_004",
+      "productId": "prod_007",
+      "quantity": 3,
+      "transactionType": "return",
+      "date": "2024-01-07T16:00:00Z",
+      "remarks": "Returned due to defect"
+    }
+  ]
