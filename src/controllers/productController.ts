@@ -22,7 +22,7 @@ export const createProduct = async (
     res: Response
   ): Promise<void> => {
     try {
-      const { productId, name, code, price, description, quantity } = req.body;
+      const { productId, name, code, price, description, quantity, location } = req.body;
 
       if (!name || !code || !price ) {
         res.status(400).json({ message: "Missing required fields" });
@@ -36,6 +36,7 @@ export const createProduct = async (
           price,
           description,
           quantity,
+          location
         },
       });
       res.status(201).json(product);
@@ -44,3 +45,6 @@ export const createProduct = async (
       console.log(error)
     }
   };
+
+
+  

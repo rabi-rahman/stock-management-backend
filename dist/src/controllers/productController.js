@@ -24,7 +24,7 @@ const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 exports.getProducts = getProducts;
 const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { productId, name, code, price, description, quantity } = req.body;
+        const { productId, name, code, price, description, quantity, location } = req.body;
         if (!name || !code || !price) {
             res.status(400).json({ message: "Missing required fields" });
         }
@@ -36,6 +36,7 @@ const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 price,
                 description,
                 quantity,
+                location
             },
         });
         res.status(201).json(product);
