@@ -15,22 +15,21 @@ datasource db {
 
 model Products {
   productId   String    @id
-  name        String    @db.VarChar(255)
+  name        String?    @db.VarChar(255)
   code        String    @db.VarChar(10)
   description String?   @db.Text
-  price       Decimal   @db.Decimal(10, 2)
+  row       String?   @db.VarChar(20)
   quantity    Int       @default(0)
-  location    String?   @db.VarChar(255)
   createdAt   DateTime  @default(now())
   transactions Transaction[]
 }
 
 model Transaction {
   transactionId   String    @id
-  productId       String
+  productId       String?
   quantity        Int       @default(0)
   transactionType String    @db.VarChar(10)
   date            DateTime  @default(now())
   remarks         String?   @db.Text
-  product         Products   @relation(fields: [productId], references: [productId])
+  product         Products?   @relation(fields: [productId], references: [productId])
 }

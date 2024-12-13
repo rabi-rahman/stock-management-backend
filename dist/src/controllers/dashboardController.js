@@ -26,7 +26,7 @@ const getDashboardMetrics = (req, res) => __awaiter(void 0, void 0, void 0, func
                     select: {
                         name: true,
                         code: true,
-                        price: true,
+                        row: true,
                         description: true,
                     },
                 },

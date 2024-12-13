@@ -21,7 +21,7 @@ export const getDashboardMetrics = async (
                   select: {
                     name: true,
                     code: true,
-                    price:true,
+                    row:true,
                     description:true,
                   },
                 },

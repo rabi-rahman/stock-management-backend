@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createProduct = exports.getProducts = void 0;
+exports.editProduct = exports.deleteProduct = exports.createProduct = exports.getProducts = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -24,8 +24,8 @@ const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 exports.getProducts = getProducts;
 const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { productId, name, code, price, description, quantity, location } = req.body;
-        if (!name || !code || !price) {
+        const { productId, name, code, row, description, quantity } = req.body;
+        if (!code || !quantity) {
             res.status(400).json({ message: "Missing required fields" });
         }
         const product = yield prisma.products.create({
@@ -33,10 +33,9 @@ const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 productId,
                 name,
                 code,
-                price,
+                row,
                 description,
                 quantity,
-                location
             },
         });
         res.status(201).json(product);
@@ -47,3 +46,55 @@ const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.createProduct = createProduct;
+const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { productId } = req.params;
+        const product = yield prisma.products.findUnique({
+            where: { productId },
+        });
+        if (!product) {
+            res.status(404).json({ message: "Product not found" });
+            return;
+        }
+        yield prisma.transaction.updateMany({
+            where: { productId },
+            data: { productId: null },
+        });
+        yield prisma.products.delete({
+            where: { productId },
+        });
+        res.status(200).json({ message: "Product deleted and transaction data preserved" });
+    }
+    catch (error) {
+        console.error("Error deleting product:", error);
+        res.status(500).json({ message: "Error deleting product" });
+    }
+});
+exports.deleteProduct = deleteProduct;
+const editProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { productId } = req.params;
+        const { name, code, row, description, quantity } = req.body;
+        if (!productId) {
+            res.status(400).json({ message: "Product ID is required" });
+            return;
+        }
+        console.log('Request body:', req.body);
+        const updatedProduct = yield prisma.products.update({
+            where: { productId },
+            data: {
+                name,
+                code,
+                row,
+                description,
+                quantity,
+            },
+        });
+        console.log('Updated Product:', updatedProduct);
+        res.status(200).json({ message: "Product updated successfully", updatedProduct });
+    }
+    catch (error) {
+        console.error("Error updating product:", error);
+    }
+});
+exports.editProduct = editProduct;
