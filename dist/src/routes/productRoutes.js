@@ -7,4 +7,5 @@ router.get("/", productController_1.getProducts);
 router.post("/", productController_1.createProduct);
 router.delete("/:productId", productController_1.deleteProduct);
 router.put("/:productId", productController_1.editProduct);
+router.patch("/:productId/add-stock", productController_1.addStock);
 exports.default = router;

@@ -62,21 +62,21 @@ export const createProduct = async (
             return;
         }
 
-        await prisma.transaction.updateMany({
+        await prisma.transaction.deleteMany({
             where: { productId },
-            data: { productId: null },
         });
 
         await prisma.products.delete({
             where: { productId },
         });
 
-        res.status(200).json({ message: "Product deleted and transaction data preserved" });
+        res.status(200).json({ message: "Product and related transactions deleted successfully" });
     } catch (error) {
-        console.error("Error deleting product:", error);
-        res.status(500).json({ message: "Error deleting product" });
+        console.error("Error deleting product and transactions:", error);
+        res.status(500).json({ message: "Error deleting product and transactions" });
     }
 };
+
 
 export const editProduct = async (
   req: Request,
@@ -110,9 +110,57 @@ export const editProduct = async (
   } catch (error) {
     console.error("Error updating product:", error);
   }
-
-  
 };
+
+export const addStock = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { productId } = req.params;
+    const { quantity } = req.body; 
+
+    if (!productId) {
+      res.status(400).json({ message: "Product ID is required" });
+      return;
+    }
+
+    if (!quantity || quantity <= 0) {
+      res
+        .status(400)
+        .json({ message: "Quantity to add must be a positive number" });
+      return;
+    }
+
+    const product = await prisma.products.findUnique({
+      where: { productId },
+    });
+
+    if (!product) {
+      res.status(404).json({ message: "Product not found" });
+      return;
+    }
+
+    const updatedProduct = await prisma.products.update({
+      where: { productId },
+      data: {
+        quantity: product.quantity + quantity,
+      },
+    });
+
+    res.status(200).json({
+      message: "Stock added successfully",
+      updatedProduct,
+    });
+  } catch (error) {
+    console.error("Error adding stock:", error);
+    res.status(500).json({ message: "Error adding stock to product" });
+  }
+};
+
+
+
+
 
 
 
